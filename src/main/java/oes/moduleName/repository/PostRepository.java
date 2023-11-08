@@ -11,7 +11,7 @@ import oes.moduleName.entity.Post;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer>{
-	@Query("SELECT p FROM Post p WHERE p.course_id = :courseId")
-    List<Post> findByCourseId(@Param("courseId") int courseId);
+    // @Query("SELECT p FROM Post p WHERE p.course_id = :courseId")
+    List<Post> findBycourseId(int courseId);
 }
 

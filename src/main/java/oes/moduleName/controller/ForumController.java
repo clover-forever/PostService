@@ -32,9 +32,9 @@ public class ForumController {
 		return post;
 	}
 	
-	@GetMapping("/getAllForum/{course_id}")
-	public List<Post> getAllForum(@PathVariable int course_id){
-		List<Post> forumList = postRepository.findByCourseId(course_id);
+	@GetMapping("/getAllForum/{courseId}")
+	public List<Post> getAllForum(@PathVariable int courseId){
+		List<Post> forumList = postRepository.findBycourseId(courseId);
 		return forumList;
 	}
 	
@@ -49,9 +49,9 @@ public class ForumController {
 //		}
 //		return "Delete Successfully";
 //	}
-	@DeleteMapping("/deleteForum/{post_num}")
-	public ResponseEntity<String> deleteForum(@PathVariable int post_num) {
-	    Optional<Post> postOptional = postRepository.findById(post_num);
+	@DeleteMapping("/deleteForum/{postNum}")
+	public ResponseEntity<String> deleteForum(@PathVariable int postNum) {
+	    Optional<Post> postOptional = postRepository.findById(postNum);
 	    if (postOptional.isPresent()) {
 	        Post delPost = postOptional.get();
 	        postRepository.delete(delPost);
@@ -61,9 +61,9 @@ public class ForumController {
 	    }
 	}
 	
-	@PutMapping("/updateForum/{post_num}")
-	public ResponseEntity<Post> updateForumData(@RequestBody Post updatedPost, @PathVariable int post_num) {
-	    Optional<Post> postOptional = postRepository.findById(post_num);
+	@PutMapping("/updateForum/{postNum}")
+	public ResponseEntity<Post> updateForumData(@RequestBody Post updatedPost, @PathVariable int postNum) {
+	    Optional<Post> postOptional = postRepository.findById(postNum);
 	    if (postOptional.isPresent()) {
 	        Post existingPost = postOptional.get();
 	        

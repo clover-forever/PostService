@@ -18,17 +18,17 @@ public class Post {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "post_num")
-	private Integer post_num;
+	@Column(name = "postNum")
+	private Integer postNum;
 	
-	@Column(name = "author_id")
-	private String author_id;
+	@Column(name = "authorId")
+	private String authorId;
 	
-	@Column(name = "course_id")
-	private Integer course_id;
+	@Column(name = "courseId")
+	private Integer courseId;
 	
-	@Column(name = "post_type")
-	private Integer post_type;
+	@Column(name = "postType")
+	private Integer postType;
 	
 	@Column(name = "title")
 	private String title;
@@ -43,52 +43,52 @@ public class Post {
 	
 	public Post() {}
 	
-	public Post(Integer post_num, 
-				String author_id, 
-				Integer course_id, 
-				Integer post_type, 
+	public Post(Integer postNum, 
+				String authorId, 
+				Integer courseId, 
+				Integer postType, 
 				String title, 
 				String content,
 				LocalDateTime timestamp) {
-		this.post_num = post_num;
-		this.author_id = author_id;
-		this.course_id = course_id;
-		this.post_type = post_type;
+		this.postNum = postNum;
+		this.authorId = authorId;
+		this.courseId = courseId;
+		this.postType = postType;
 		this.title = title;
 		this.content = content;
 		this.timestamp = timestamp;
 	}
 
-	public Integer getPost_num() {
-		return post_num;
+	public Integer getPostNum() {
+		return postNum;
 	}
 
-	public void setPost_num(Integer post_num) {
-		this.post_num = post_num;
+	public void setPostNum(Integer postNum) {
+		this.postNum = postNum;
 	}
 
-	public String getAuthor_id() {
-		return author_id;
+	public String getAuthorId() {
+		return authorId;
 	}
 
-	public void setAuthor_id(String author_id) {
-		this.author_id = author_id;
+	public void setAuthorId(String authorId) {
+		this.authorId = authorId;
 	}
 
-	public Integer getCourse_id() {
-		return course_id;
+	public Integer getCourseId() {
+		return courseId;
 	}
 
-	public void setCourse_id(Integer course_id) {
-		this.course_id = course_id;
+	public void setCourseId(Integer courseId) {
+		this.courseId = courseId;
 	}
 
-	public Integer getPost_type() {
-		return post_type;
+	public Integer getPostType() {
+		return postType;
 	}
 
-	public void setPost_type(Integer post_type) {
-		this.post_type = post_type;
+	public void setPostType(Integer postType) {
+		this.postType = postType;
 	}
 
 	public String getTitle() {
@@ -117,8 +117,8 @@ public class Post {
 	
 	@Override
 	public String toString() {
-		return "Post [post_num=" + post_num + ", author_id=" + author_id + ", course_id=" + course_id + ", post_type="
-				+ post_type + ", title=" + title + ", content=" + content + ", timestamp=" + timestamp + "]";
+		return "Post [postNum=" + postNum + ", authorId=" + authorId + ", courseId=" + courseId + ", postType="
+				+ postType + ", title=" + title + ", content=" + content + ", timestamp=" + timestamp + "]";
 	}
 
 }
