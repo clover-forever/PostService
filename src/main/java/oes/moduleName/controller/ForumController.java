@@ -26,8 +26,9 @@ public class ForumController {
 		return "Welcome to hell again and again";
 	}
 	
-	@PostMapping("/addForum")
-	public Post saveForum(@RequestBody Post post) {
+	@PostMapping("/addForum/{courseId}")
+	public Post saveForum(@RequestBody Post post, @PathVariable int courseId) {
+		post.setCourseId(courseId);
 		postRepository.save(post);
 		return post;
 	}
