@@ -29,6 +29,7 @@ public class ForumController {
 	@PostMapping("/addForum/{courseId}")
 	public Post saveForum(@RequestBody Post post, @PathVariable int courseId) {
 		post.setCourseId(courseId);
+		post.setPostType(0);
 		postRepository.save(post);
 		return post;
 	}
