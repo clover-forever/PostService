@@ -1,9 +1,9 @@
 package oes.moduleName.controller;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,23 +15,30 @@ import org.springframework.web.bind.annotation.RestController;
 
 import oes.moduleName.entity.Post;
 import oes.moduleName.repository.PostRepository;
+import oes.moduleName.service.PostService;
 
 @RestController
 public class ForumController {
 	@Autowired
 	private PostRepository postRepository;
+
+	@Autowired
+	private PostService service;
 	
 	@GetMapping("/")
 	public String index() {
 		return "Welcome to hell again and again";
 	}
 	
-	@PostMapping("/addForum/{courseId}")
-	public Post saveForum(@RequestBody Post post, @PathVariable int courseId) {
-		post.setCourseId(courseId);
-		post.setPostType(0);
-		postRepository.save(post);
-		return post;
+	@PostMapping("/{authorId}/{courseId}/addForum")
+	public ResponseEntity<Object> saveForum(@RequestBody Map<String, String> post, 
+											@PathVariable int courseId,
+											@PathVariable String authorId) {
+		Map<String, Object> response = new HashMap<>();
+    	String ret = service.saveForum(post.get("title"), post.get("content"), courseId, authorId);
+    	response.put("response", ret);
+    	return ResponseEntity.status(ret.equals("successful") ? HttpStatus.OK : HttpStatus.BAD_REQUEST)
+        	.body(response);
 	}
 	
 	@GetMapping("/getAllForum/{courseId}")
@@ -40,17 +47,6 @@ public class ForumController {
 		return forumList;
 	}
 	
-//	@DeleteMapping("/deleteForum/{post_num}")
-//	public String deleteForum(@PathVariable int post_num) {
-//		Optional<Post> delPost = postRepository.findById(post_num).get();
-//		if(delPost != null) {
-//			postRepository.delete(delPost);
-//		}
-//		else {
-//			return "not found forum";
-//		}
-//		return "Delete Successfully";
-//	}
 	@DeleteMapping("/deleteForum/{postNum}")
 	public ResponseEntity<String> deleteForum(@PathVariable int postNum) {
 	    Optional<Post> postOptional = postRepository.findById(postNum);
