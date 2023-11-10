@@ -1,9 +1,11 @@
 package oes.moduleName.controller;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.data.util.Pair;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,23 +61,28 @@ public class ForumController {
 	    }
 	}
 	
-	@PutMapping("/updateForum/{postNum}")
-	public ResponseEntity<Post> updateForumData(@RequestBody Post updatedPost, @PathVariable int postNum) {
-	    Optional<Post> postOptional = postRepository.findById(postNum);
-	    if (postOptional.isPresent()) {
-	        Post existingPost = postOptional.get();
-	        
-	        existingPost.setTitle(updatedPost.getTitle());
-	        existingPost.setContent(updatedPost.getContent());
-	        
-	        Post savedPost = postRepository.save(existingPost);
-	        
-	        return ResponseEntity.ok(savedPost);
-	    } 
-	    else {
-	        return ResponseEntity.notFound().build();
-	    }
+	@PutMapping("/{authorId}/{courseId}/{postNum}/updateForum")
+	public ResponseEntity<Object> updateForumData(@RequestBody Map<String, String> updatedPost, 
+												@PathVariable int postNum,
+												@PathVariable String authorId,
+												@PathVariable int courseId) 
+	{
+		Map<String, String> response = new HashMap<>();
+	    
+		
+			Optional<Post> fp = postRepository.findById(postNum);
+			Post uppost;
+			if (!fp.isPresent()) {
+				response.put("response", "The post_id doesn't exit");
+				return ResponseEntity.badRequest().body(response);
+			} 
+			else {
+				uppost = fp.get();
+				String ret = service.updateForum(uppost, updatedPost.get("title"), updatedPost.get("content"), courseId, authorId, postNum);
+				response.put("response", ret);
+    			return ResponseEntity.status(ret.equals("successful") ? HttpStatus.OK : HttpStatus.BAD_REQUEST)
+        			.body(response);
+			}
+		
 	}
-
-
 }

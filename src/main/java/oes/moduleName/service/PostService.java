@@ -1,6 +1,7 @@
 package oes.moduleName.service;
 
 import java.time.LocalDateTime;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,5 +29,19 @@ public class PostService {
             return "failure";
         }
 
+    }
+
+    public String updateForum(Post updatedPost, String title, String content, 
+                                Integer courseId, String authorId, 
+                                Integer postNum){
+        try{
+            updatedPost.setContent(content);
+            updatedPost.setTitle(title);
+            postRepository.save(updatedPost);
+            return "successful";
+        }
+        catch (Exception e){
+            return "failure";
+        }
     }
 }
