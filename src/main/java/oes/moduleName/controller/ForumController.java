@@ -145,4 +145,30 @@ public class ForumController {
 	        return ResponseEntity.ok("Comment not found.");
 	    }
 	}
+
+	@PutMapping(value = {"/{authorId}/course/{courseId}/announcement/{postNum}/{commentId}/update", 
+						"/{authorId}/course/{courseId}/discussion/{postNum}/{commentId}/update"})
+	public ResponseEntity<Object> updateComment(@RequestBody Map<String, String> updatedComment, 
+												@PathVariable int postNum,
+												@PathVariable String authorId,
+												@PathVariable int commentId) 
+	{
+		Map<String, String> response = new HashMap<>();
+	    
+		
+			Optional<Comment> fc = commentRepository.findById(commentId);
+			Comment upcomment;
+			if (!fc.isPresent()) {
+				response.put("response", "The comment_id doesn't exit");
+				return ResponseEntity.badRequest().body(response);
+			} 
+			else {
+				upcomment = fc.get();
+				String ret = service.updateComment(upcomment, updatedComment.get("message"), authorId, postNum, commentId);
+				response.put("response", ret);
+    			return ResponseEntity.status(ret.equals("successful") ? HttpStatus.OK : HttpStatus.BAD_REQUEST)
+        			.body(response);
+			}
+		
+	}
 }

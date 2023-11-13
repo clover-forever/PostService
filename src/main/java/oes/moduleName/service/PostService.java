@@ -81,4 +81,18 @@ public class PostService {
         }
 
     }
+
+    public String updateComment(Comment updatedComment, String message, 
+                                String authorId, 
+                                Integer postNum,
+                                Integer commentId){
+        try{
+            updatedComment.setMessage(message);
+            commentRepository.save(updatedComment);
+            return "successful";
+        }
+        catch (Exception e){
+            return "failure";
+        }
+    }
 }
