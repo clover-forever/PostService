@@ -132,4 +132,17 @@ public class ForumController {
 	public List<Comment> getAllComment(@PathVariable int postNum) {
 		return commentRepository.findBypostNum(postNum);
 	}
+
+	@DeleteMapping(value = {"/{authorId}/course/{courseId}/announcement/{postNum}/{commentId}/delete", 
+							"/{authorId}/course/{courseId}/discussion/{postNum}/{commentId}/delete"})
+	public ResponseEntity<String> deleteComment(@PathVariable int commentId) {
+	    Optional<Comment> commentOptional = commentRepository.findById(commentId);
+	    if (commentOptional.isPresent()) {
+	        Comment delComment = commentOptional.get();
+	        commentRepository.delete(delComment);
+	        return ResponseEntity.ok("Delete Successfully");
+	    } else {
+	        return ResponseEntity.ok("Comment not found.");
+	    }
+	}
 }
