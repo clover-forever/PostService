@@ -61,9 +61,16 @@ public class ForumController {
 	}
 	
 	@GetMapping(value = {"/{authorId}/course/{courseId}/announcement", "/{authorId}/course/{courseId}/discussion"})
-	public List<Post> getAllForum(@PathVariable int courseId){
-		List<Post> forumList = postRepository.findBycourseId(courseId);
-		return forumList;
+	public List<Post> getAllForum(HttpServletRequest request, @PathVariable int courseId) {
+		String path = request.getRequestURI();
+	
+		if (path.contains("/announcement")) {
+			return postRepository.findBycourseIdAndpostType(courseId, 0);
+		} else if (path.contains("/discussion")) {
+			return postRepository.findBycourseIdAndpostType(courseId, 1);
+		} else {
+			return new ArrayList<>();
+		}
 	}
 	
 	@DeleteMapping(value = {"/{authorId}/course/{courseId}/announcement/{postNum}/delete", "/{authorId}/course/{courseId}/discussion/{postNum}/delete"})
