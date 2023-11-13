@@ -6,13 +6,18 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import oes.moduleName.entity.Post;
+import oes.moduleName.entity.Comment;
 import oes.moduleName.repository.PostRepository;
+import oes.moduleName.repository.CommentRepository;
 
 @Component
 public class PostService {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     public String saveForum(String title, String content, Integer courseId, String authorId){
         try{
@@ -60,5 +65,20 @@ public class PostService {
         catch (Exception e){
             return "failure";
         }
+    }
+
+    public String saveComment(String message, Integer postNum, String authorId){
+        try{
+            Comment comment = new Comment();
+            comment.setUserId(authorId);
+            comment.setMessage(message);
+            comment.setPostNum(postNum);
+            commentRepository.save(comment);
+            return "successful";
+        }
+        catch (Exception e){
+            return "failure";
+        }
+
     }
 }

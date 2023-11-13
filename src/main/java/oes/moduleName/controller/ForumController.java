@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import oes.moduleName.entity.Post;
+import oes.moduleName.entity.Comment;
+import oes.moduleName.repository.CommentRepository;
 import oes.moduleName.repository.PostRepository;
 import oes.moduleName.service.PostService;
 
@@ -24,6 +26,9 @@ import oes.moduleName.service.PostService;
 public class ForumController {
 	@Autowired
 	private PostRepository postRepository;
+
+	@Autowired
+	private CommentRepository commentRepository;
 
 	@Autowired
 	private PostService service;
@@ -108,5 +113,23 @@ public class ForumController {
         			.body(response);
 			}
 		
+	}
+
+
+	@PostMapping(value = {"/{authorId}/course/{courseId}/announcement/{postNum}/addComment", "/{authorId}/course/{courseId}/discussion/{postNum}/addComment"})
+	public ResponseEntity<Object> saveComment(@RequestBody Map<String, String> comment, 
+											@PathVariable int postNum,
+											@PathVariable String authorId) {
+		Map<String, Object> response = new HashMap<>();
+
+		String ret = service.saveComment(comment.get("message"), postNum, authorId);
+		response.put("response", ret);
+		return ResponseEntity.status(ret.equals("successful") ? HttpStatus.OK : HttpStatus.BAD_REQUEST)
+			.body(response);		
+	}
+
+	@GetMapping(value = {"/{authorId}/course/{courseId}/announcement/{postNum}", "/{authorId}/course/{courseId}/discussion/{postNum}"})
+	public List<Comment> getAllComment(@PathVariable int postNum) {
+		return commentRepository.findBypostNum(postNum);
 	}
 }

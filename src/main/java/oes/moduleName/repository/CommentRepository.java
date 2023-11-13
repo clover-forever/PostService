@@ -8,8 +8,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import oes.moduleName.entity.Comment;
+import oes.moduleName.entity.Post;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer>{
-
+    List<Comment> findBypostNum( int postNum);
 }
