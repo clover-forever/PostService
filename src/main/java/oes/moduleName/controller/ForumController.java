@@ -32,7 +32,7 @@ public class ForumController {
 		return "Welcome to hell again and again";
 	}
 	
-	@PostMapping("/{authorId}/{courseId}/addForum")
+	@PostMapping("/{authorId}/course/{courseId}/announcement/addForum")
 	public ResponseEntity<Object> saveForum(@RequestBody Map<String, String> post, 
 											@PathVariable int courseId,
 											@PathVariable String authorId) {
@@ -43,13 +43,13 @@ public class ForumController {
         	.body(response);
 	}
 	
-	@GetMapping("/getAllForum/{courseId}")
+	@GetMapping("/{authorId}/course/{courseId}/announcement")
 	public List<Post> getAllForum(@PathVariable int courseId){
 		List<Post> forumList = postRepository.findBycourseId(courseId);
 		return forumList;
 	}
 	
-	@DeleteMapping("/deleteForum/{postNum}")
+	@DeleteMapping("/{authorId}/course/{courseId}/announcement/{postNum}/delete")
 	public ResponseEntity<String> deleteForum(@PathVariable int postNum) {
 	    Optional<Post> postOptional = postRepository.findById(postNum);
 	    if (postOptional.isPresent()) {
@@ -61,7 +61,7 @@ public class ForumController {
 	    }
 	}
 	
-	@PutMapping("/{authorId}/{courseId}/{postNum}/updateForum")
+	@PutMapping("/{authorId}/course/{courseId}/announcement/{postNum}/update")
 	public ResponseEntity<Object> updateForumData(@RequestBody Map<String, String> updatedPost, 
 												@PathVariable int postNum,
 												@PathVariable String authorId,
