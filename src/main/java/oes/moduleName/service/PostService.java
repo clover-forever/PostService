@@ -31,6 +31,23 @@ public class PostService {
 
     }
 
+    public String saveDiscussion(String title, String content, Integer courseId, String authorId){
+        try{
+            Post post = new Post();
+            post.setAuthorId(authorId);
+            post.setContent(content);
+            post.setTitle(title);
+            post.setCourseId(courseId);
+            post.setPostType(1);
+            postRepository.save(post);
+            return "successful";
+        }
+        catch (Exception e){
+            return "failure";
+        }
+
+    }
+
     public String updateForum(Post updatedPost, String title, String content, 
                                 Integer courseId, String authorId, 
                                 Integer postNum){
