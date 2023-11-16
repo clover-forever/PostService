@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: post-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/project
+    username: root
+    password: 000000
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database: MYSQL
+    hibernate:
+      ddl-auto: update
+      
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      enabled: true
+      show-details: always
+
+eureka:
+  instance:
+    hostname: post-service
+    instance-id: post-service
+    prefer-ip-address: true
+
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:20001/eureka/
+    healthcheck:
+      enabled: true
