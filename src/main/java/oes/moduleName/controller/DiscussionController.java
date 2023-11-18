@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpServletRequest;
+// import jakarta.servlet.http.HttpServletRequest;
 import oes.moduleName.entity.Post;
 import oes.moduleName.entity.Comment;
 import oes.moduleName.repository.CommentRepository;
@@ -23,7 +24,8 @@ import oes.moduleName.repository.PostRepository;
 import oes.moduleName.service.PostService;
 
 @RestController
-public class ForumController {
+@RequestMapping("/discussion")
+public class DiscussionController {
 	@Autowired
 	private PostRepository postRepository;
 
@@ -35,63 +37,40 @@ public class ForumController {
 	
 	@GetMapping("/")
 	public String index() {
-		return "Welcome to hell again and again";
+		return "Welcome to discussion!";
 	}
 	
-	@PostMapping(value = {"/{authorId}/course/{courseId}/announcement/addAnnouncement", "/{authorId}/course/{courseId}/discussion/addDiscussion"})
-	public ResponseEntity<Object> saveForum(@RequestBody Map<String, String> post, 
+	@PostMapping(value = {"/{authorId}/course/{courseId}/discussion/addDiscussion"})
+	public ResponseEntity<Object> saveDiscussion(@RequestBody Map<String, String> post, 
 											@PathVariable int courseId,
-											@PathVariable String authorId,
-											HttpServletRequest request) {
+											@PathVariable String authorId) {
 		Map<String, Object> response = new HashMap<>();
-		String path = request.getRequestURI();
-
-		if(path.contains("/announcement/addAnnouncement")){
-			String ret = service.saveForum(post.get("title"), post.get("content"), courseId, authorId);
-			response.put("response", ret);
-			return ResponseEntity.status(ret.equals("successful") ? HttpStatus.OK : HttpStatus.BAD_REQUEST)
-				.body(response);
-		}
-		else if(path.contains("/discussion/addDiscussion")){
-			String ret = service.saveDiscussion(post.get("title"), post.get("content"), courseId, authorId);
-			response.put("response", ret);
-			return ResponseEntity.status(ret.equals("successful") ? HttpStatus.OK : HttpStatus.BAD_REQUEST)
-				.body(response);
-		}
-		else{
-			response.put("response", "Unknown path");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(response);
-		}
+		
+        String ret = service.saveDiscussion(post.get("title"), post.get("content"), courseId, authorId);
+        response.put("response", ret);
+        return ResponseEntity.status(ret.equals("successful") ? HttpStatus.OK : HttpStatus.BAD_REQUEST)
+            .body(response);
 	}
 	
-	@GetMapping(value = {"/{authorId}/course/{courseId}/announcement", "/{authorId}/course/{courseId}/discussion"})
-	public List<Post> getAllForum(HttpServletRequest request, @PathVariable int courseId) {
-		String path = request.getRequestURI();
-	
-		if (path.contains("/announcement")) {
-			return postRepository.findBycourseIdAndpostType(courseId, 0);
-		} else if (path.contains("/discussion")) {
-			return postRepository.findBycourseIdAndpostType(courseId, 1);
-		} else {
-			return new ArrayList<>();
-		}
+	@GetMapping(value = {"/{authorId}/course/{courseId}/discussion"})
+	public List<Post> getAllDiscussion(@PathVariable int courseId) {
+		return postRepository.findBycourseIdAndpostType(courseId, 1);
 	}
 	
-	@DeleteMapping(value = {"/{authorId}/course/{courseId}/announcement/{postNum}/delete", "/{authorId}/course/{courseId}/discussion/{postNum}/delete"})
-	public ResponseEntity<String> deleteForum(@PathVariable int postNum) {
+	@DeleteMapping(value = {"/{authorId}/course/{courseId}/discussion/{postNum}/delete"})
+	public ResponseEntity<String> deleteDiscussion(@PathVariable int postNum) {
 	    Optional<Post> postOptional = postRepository.findById(postNum);
 	    if (postOptional.isPresent()) {
 	        Post delPost = postOptional.get();
 	        postRepository.delete(delPost);
 	        return ResponseEntity.ok("Delete Successfully");
 	    } else {
-	        return ResponseEntity.ok("Forum not found.");
+	        return ResponseEntity.ok("Discussion not found.");
 	    }
 	}
 	
-	@PutMapping(value = {"/{authorId}/course/{courseId}/announcement/{postNum}/update", "/{authorId}/course/{courseId}/discussion/{postNum}/update"})
-	public ResponseEntity<Object> updateForumData(@RequestBody Map<String, String> updatedPost, 
+	@PutMapping(value = {"/{authorId}/course/{courseId}/discussion/{postNum}/update"})
+	public ResponseEntity<Object> updateDiscussionData(@RequestBody Map<String, String> updatedPost, 
 												@PathVariable int postNum,
 												@PathVariable String authorId,
 												@PathVariable int courseId) 
@@ -116,7 +95,7 @@ public class ForumController {
 	}
 
 
-	@PostMapping(value = {"/{authorId}/course/{courseId}/announcement/{postNum}/addComment", "/{authorId}/course/{courseId}/discussion/{postNum}/addComment"})
+	@PostMapping(value = {"/{authorId}/course/{courseId}/discussion/{postNum}/addComment"})
 	public ResponseEntity<Object> saveComment(@RequestBody Map<String, String> comment, 
 											@PathVariable int postNum,
 											@PathVariable String authorId) {
@@ -128,13 +107,12 @@ public class ForumController {
 			.body(response);		
 	}
 
-	@GetMapping(value = {"/{authorId}/course/{courseId}/announcement/{postNum}", "/{authorId}/course/{courseId}/discussion/{postNum}"})
+	@GetMapping(value = {"/{authorId}/course/{courseId}/discussion/{postNum}"})
 	public List<Comment> getAllComment(@PathVariable int postNum) {
 		return commentRepository.findBypostNum(postNum);
 	}
 
-	@DeleteMapping(value = {"/{authorId}/course/{courseId}/announcement/{postNum}/{commentId}/delete", 
-							"/{authorId}/course/{courseId}/discussion/{postNum}/{commentId}/delete"})
+	@DeleteMapping(value = {"/{authorId}/course/{courseId}/discussion/{postNum}/{commentId}/delete"})
 	public ResponseEntity<String> deleteComment(@PathVariable int commentId) {
 	    Optional<Comment> commentOptional = commentRepository.findById(commentId);
 	    if (commentOptional.isPresent()) {
@@ -146,8 +124,7 @@ public class ForumController {
 	    }
 	}
 
-	@PutMapping(value = {"/{authorId}/course/{courseId}/announcement/{postNum}/{commentId}/update", 
-						"/{authorId}/course/{courseId}/discussion/{postNum}/{commentId}/update"})
+	@PutMapping(value = {"/{authorId}/course/{courseId}/discussion/{postNum}/{commentId}/update"})
 	public ResponseEntity<Object> updateComment(@RequestBody Map<String, String> updatedComment, 
 												@PathVariable int postNum,
 												@PathVariable String authorId,

@@ -19,7 +19,7 @@ public class PostService {
     @Autowired
     private CommentRepository commentRepository;
 
-    public String saveForum(String title, String content, Integer courseId, String authorId){
+    public String saveAnnouncement(String title, String content, Integer courseId, String authorId){
         try{
             Post post = new Post();
             post.setAuthorId(authorId);
