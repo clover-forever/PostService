@@ -53,9 +53,7 @@ public class PostService {
 
     }
 
-    public String updateForum(Post updatedPost, String title, String content, 
-                                Integer courseId, String authorId, 
-                                Integer postNum){
+    public String updateForum(Post updatedPost, String title, String content, String authorId){
         try{
             updatedPost.setContent(content);
             updatedPost.setTitle(title);
@@ -83,9 +81,7 @@ public class PostService {
     }
 
     public String updateComment(Comment updatedComment, String message, 
-                                String authorId, 
-                                Integer postNum,
-                                Integer commentId){
+                                String authorId){
         try{
             updatedComment.setMessage(message);
             commentRepository.save(updatedComment);

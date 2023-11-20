@@ -40,7 +40,7 @@ public class AnnouncementController {
 		return "Welcome to announcement!";
 	}
 	
-	@PostMapping(value = {"/{authorId}/course/{courseId}/announcement/addAnnouncement"})
+	@PostMapping(value = {"/course/{courseId}/announcement/{authorId}/addAnnouncement"})
 	public ResponseEntity<Object> saveAnnouncement(@RequestBody Map<String, String> post, 
 											@PathVariable int courseId,
 											@PathVariable String authorId) {
@@ -52,13 +52,13 @@ public class AnnouncementController {
 			.body(response);
 	}
 	
-	@GetMapping(value = {"/{authorId}/course/{courseId}/announcement"})
+	@GetMapping(value = {"/course/{courseId}/announcement/{authorId}"})
 	public List<Post> getAllAnnouncement(@PathVariable int courseId) {
 		return postRepository.findBycourseIdAndpostType(courseId, 0);
 	}
 	
-	@DeleteMapping(value = {"/{authorId}/course/{courseId}/announcement/{postNum}/delete"})
-	public ResponseEntity<String> deleteAnnouncement(@PathVariable int postNum) {
+	@DeleteMapping(value = {"/course/{courseId}/announcement/{authorId}/{postNum}/delete"})
+	public ResponseEntity<String> deleteAnnouncement(@PathVariable int postNum, @PathVariable String authorId) {
 	    Optional<Post> postOptional = postRepository.findById(postNum);
 	    if (postOptional.isPresent()) {
 	        Post delPost = postOptional.get();
@@ -69,11 +69,10 @@ public class AnnouncementController {
 	    }
 	}
 	
-	@PutMapping(value = {"/{authorId}/course/{courseId}/announcement/{postNum}/update"})
+	@PutMapping(value = {"/course/{courseId}/announcement/{authorId}/{postNum}/update"})
 	public ResponseEntity<Object> updateAnnouncementData(@RequestBody Map<String, String> updatedPost, 
 												@PathVariable int postNum,
-												@PathVariable String authorId,
-												@PathVariable int courseId) 
+												@PathVariable String authorId) 
 	{
 		Map<String, String> response = new HashMap<>();
 	    
@@ -86,7 +85,7 @@ public class AnnouncementController {
 			} 
 			else {
 				uppost = fp.get();
-				String ret = service.updateForum(uppost, updatedPost.get("title"), updatedPost.get("content"), courseId, authorId, postNum);
+				String ret = service.updateForum(uppost, updatedPost.get("title"), updatedPost.get("content"), authorId);
 				response.put("response", ret);
     			return ResponseEntity.status(ret.equals("successful") ? HttpStatus.OK : HttpStatus.BAD_REQUEST)
         			.body(response);
@@ -95,7 +94,7 @@ public class AnnouncementController {
 	}
 
 
-	@PostMapping(value = {"/{authorId}/course/{courseId}/announcement/{postNum}/addComment"})
+	@PostMapping(value = {"/course/{courseId}/announcement/{authorId}/{postNum}/addComment"})
 	public ResponseEntity<Object> saveComment(@RequestBody Map<String, String> comment, 
 											@PathVariable int postNum,
 											@PathVariable String authorId) {
@@ -107,13 +106,13 @@ public class AnnouncementController {
 			.body(response);		
 	}
 
-	@GetMapping(value = {"/{authorId}/course/{courseId}/announcement/{postNum}"})
+	@GetMapping(value = {"/course/{courseId}/announcement/{authorId}/{postNum}"})
 	public List<Comment> getAllComment(@PathVariable int postNum) {
 		return commentRepository.findBypostNum(postNum);
 	}
 
-	@DeleteMapping(value = {"/{authorId}/course/{courseId}/announcement/{postNum}/{commentId}/delete"})
-	public ResponseEntity<String> deleteComment(@PathVariable int commentId) {
+	@DeleteMapping(value = {"/course/{courseId}/announcement/{authorId}/{postNum}/{commentId}/delete"})
+	public ResponseEntity<String> deleteComment(@PathVariable int commentId, @PathVariable String authorId) {
 	    Optional<Comment> commentOptional = commentRepository.findById(commentId);
 	    if (commentOptional.isPresent()) {
 	        Comment delComment = commentOptional.get();
@@ -124,9 +123,8 @@ public class AnnouncementController {
 	    }
 	}
 
-	@PutMapping(value = {"/{authorId}/course/{courseId}/announcement/{postNum}/{commentId}/update"})
-	public ResponseEntity<Object> updateComment(@RequestBody Map<String, String> updatedComment, 
-												@PathVariable int postNum,
+	@PutMapping(value = {"/course/{courseId}/announcement/{authorId}/{postNum}/{commentId}/update"})
+	public ResponseEntity<Object> updateComment(@RequestBody Map<String, String> updatedComment,
 												@PathVariable String authorId,
 												@PathVariable int commentId) 
 	{
@@ -141,7 +139,7 @@ public class AnnouncementController {
 			} 
 			else {
 				upcomment = fc.get();
-				String ret = service.updateComment(upcomment, updatedComment.get("message"), authorId, postNum, commentId);
+				String ret = service.updateComment(upcomment, updatedComment.get("message"), authorId);
 				response.put("response", ret);
     			return ResponseEntity.status(ret.equals("successful") ? HttpStatus.OK : HttpStatus.BAD_REQUEST)
         			.body(response);
