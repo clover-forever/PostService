@@ -1,3 +1,4 @@
+package oes.post_service.presentation;
 // package oes.moduleName.presentation;
 
 // public class PostPresentation {

@@ -1,4 +1,4 @@
-package oes.moduleName.repository;
+package oes.post_service.repository;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import oes.moduleName.entity.Comment;
+import oes.post_service.entity.Comment;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer>{

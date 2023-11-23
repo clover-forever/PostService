@@ -1,4 +1,4 @@
-package oes.moduleName.entity;
+package oes.post_service.entity;
 
 import java.time.LocalDateTime;
 
