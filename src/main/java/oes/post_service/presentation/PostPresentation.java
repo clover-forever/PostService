@@ -1,50 +1,44 @@
 package oes.post_service.presentation;
-// package oes.moduleName.presentation;
 
-// public class PostPresentation {
-//     private Integer postType;
-//     private String authorId;
-//     private String title;
-//     private String content;
+import java.time.LocalDateTime;
 
-//     public PostPresentation(Integer postType, String authorId, String title, String content){
-//         this.postType = postType;
-//         this.authorId = authorId;
-//         this.title = title;
-//         this.content = content;
-//     }
-
-//     public Integer getPostType() {
-//         return postType;
-//     }
-
-//     public void setPostType(Integer postType) {
-//         this.postType = postType;
-//     }
-
-//     public String getAuthorId() {
-//         return authorId;
-//     }
-
-//     public void setAuthorId(String authorId) {
-//         this.authorId = authorId;
-//     }
-
-//     public String getTitle() {
-//         return title;
-//     }
-
-//     public void setTitle(String title) {
-//         this.title = title;
-//     }
-
-//     public String getContent() {
-//         return content;
-//     }
-
-//     public void setContent(String content) {
-//         this.content = content;
-//     }
-
+public class PostPresentation {
+    private String time;
+    private String authorName;
+    private String title;
+    private String content;
     
-// }
+    public String getTime() {
+        return time;
+    }
+    public void setTime(String time) {
+        this.time = time;
+    }
+    public String getAuthorName() {
+        return authorName;
+    }
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public PostPresentation(){
+
+    }
+    public String getContent() {
+        return content;
+    }
+    public void setContent(String content) {
+        this.content = content;
+    }
+    public PostPresentation(String time, String authorName, String title, String content) {
+        this.time = time;
+        this.authorName = authorName;
+        this.title = title;
+        this.content = content;
+    } 
+}

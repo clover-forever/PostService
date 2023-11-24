@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import oes.post_service.entity.Comment;
 import oes.post_service.entity.Post;
+import oes.post_service.presentation.PostPresentation;
+import oes.post_service.presentation.CommentPresentation;
 import oes.post_service.repository.CommentRepository;
 import oes.post_service.repository.PostRepository;
 import oes.post_service.service.PostService;
@@ -30,6 +32,8 @@ public class AnnouncementController {
 
 	@Autowired
 	private CommentRepository commentRepository;
+
+	
 
 	@Autowired
 	private PostService service;
@@ -51,9 +55,15 @@ public class AnnouncementController {
 			.body(response);
 	}
 	
+	// @GetMapping(value = {"/course/{courseId}/announcement/{authorId}"})
+	// public List<Post> getAllAnnouncement(@PathVariable int courseId) {
+	// 	return postRepository.findBycourseIdAndpostType(courseId, 0);
+	// }
+
 	@GetMapping(value = {"/course/{courseId}/announcement/{authorId}"})
-	public List<Post> getAllAnnouncement(@PathVariable int courseId) {
-		return postRepository.findBycourseIdAndpostType(courseId, 0);
+	public List<PostPresentation> getAllAnnouncement(@PathVariable int courseId) {
+		List<Post> posts = postRepository.findBycourseIdAndpostType(courseId, 0);
+		return service.getAllCourseList(posts);
 	}
 	
 	@DeleteMapping(value = {"/course/{courseId}/announcement/{authorId}/{postNum}/delete"})
@@ -109,11 +119,15 @@ public class AnnouncementController {
 	public Map<String, Object> getAllComment(@PathVariable int courseId, @PathVariable int postNum) {
 		Map<String, Object> result = new HashMap<>();
 	
-		Optional<Post> posts = postRepository.findById(postNum);
-		result.put("posts", posts);
-	
+		Post post = postRepository.findById(postNum).get();
+		System.out.println(post);
 		List<Comment> comments = commentRepository.findBypostNum(postNum);
-		result.put("comments", comments);
+		
+		PostPresentation p = service.getAllCommentOfPost(post);
+		List<CommentPresentation> c = service.getAllCommentOfComments(comments);
+
+		result.put("post", p);
+		result.put("comments", c);
 	
 		return result;
 	}
